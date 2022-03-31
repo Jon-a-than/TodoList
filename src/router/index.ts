@@ -1,0 +1,27 @@
+import { createRouter, createWebHistory, onBeforeRouteLeave } from 'vue-router'
+
+const routes = [
+  {
+    path: '/',
+    redirect: '/home'
+  },
+  {
+    path: '/home',
+    component: () => import('@/views/layout/index.vue'),
+    children: [
+      {
+        path: '/list',
+        component: () => import('@/views/todo/index.vue')
+      },
+      {
+        path: '/login',
+        component: () => import('@/views/login/index.vue')
+      }
+    ]
+  },
+]
+
+export default createRouter({
+  history: createWebHistory(),
+  routes
+})
