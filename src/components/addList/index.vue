@@ -5,12 +5,14 @@ import { reactive } from 'vue';
 
 const listStore = useListStore()
 
+// 新增list表单数据
 const data = reactive({
   todo_name: '',
   description: '',
   end_time: ''
 })
 
+// 调用新增数据
 const addList = async () => {
   if (data.todo_name && data.description && data.end_time) {
     await listStore.addList({
@@ -22,6 +24,7 @@ const addList = async () => {
   } else alert('请完善任务信息')
 }
 
+// 取消新增并返回主页
 const cancle = () => router.push('/list')
 </script>
 
@@ -61,7 +64,7 @@ $hover: #ff69b4;
 }
 p {
   width: 100%;
-  max-width: 600px;
+  max-width: 800px;
   margin: 10px;
   transition: all 1s;
   flex-grow: 1;

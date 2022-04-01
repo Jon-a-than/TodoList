@@ -1,5 +1,4 @@
 import { ApiDelete, ApiGet, ApiPut } from "@/utils/request"
-import axios from "axios"
 import { defineStore } from "pinia"
 
 export const useListStore = defineStore('list', {
@@ -29,6 +28,7 @@ export const useListStore = defineStore('list', {
             this.$state.Done.push(res.data[i])
           }
         }
+        this.sort()
       }
       else
         alert(res.message)
@@ -53,10 +53,21 @@ export const useListStore = defineStore('list', {
           token: localStorage.getItem('token')
         }
       })
-      // console.log(res)
       if(res.data.code == 2000)
         alert('添加成功')
       else alert(res.data.message)
+    },
+    /* 修改list状态 */
+    async changeState(id: number, status: string) {
+      const res = await ApiPut(`todo/${status}/${id}`, {}, {
+        headers: {
+          token: localStorage.getItem('token')
+        }
+      })
+      if(res.data.code == 2000) {
+        alert('修改成功')
+        this.requireList()
+      } else alert(res.data.message)
     },
     /* 按时间排序 */
     sort() {

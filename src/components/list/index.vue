@@ -1,10 +1,11 @@
 <script lang="ts" setup>
 import { useListStore } from '@/store'
 
+// 状态更改按钮数据
 const type = [
-  { title: 'Todo', code: 0 },
-  { title: 'Doing', code: 1 },
-  { title: 'Done', code: 2 }
+  { title: 'Todo', status: 'todo' },
+  { title: 'Doing', status: 'doing' },
+  { title: 'Done', status: 'done' }
 ]
 
 const props = defineProps({
@@ -28,20 +29,28 @@ const props = defineProps({
 
 const listStore: any = useListStore()
 
+// 去除本身状态的按钮
 for (let i = 0, j = 0; i < 3; i++) {
   if (type[i].title != props.title)
     type[j++] = type[i]
 }
 type.pop()
 
+// 删除list
 const deleteList = (id: number) => {
   listStore.deleteList(id)
 }
 
-const changeState = (id: number, state: number) => {
-  console.log(id, state)
+// 更改list状态
+const changeState = (id: number, status: string) => {
+  console.log(id, status)
+  listStore.changeState(id, status)
 }
 
+// 解析截止时间
+const parseTime = (time: string) => {
+  return new Date(time).toLocaleString()
+}
 </script>
 
 <template>
@@ -52,11 +61,19 @@ const changeState = (id: number, state: number) => {
         <div class="item" v-for="(item, index) in listStore[props.title]" :key="index">
           <h3>📌{{ index + 1 }}.{{ item.todo_name }}</h3>
           <p>📝任务描述: {{ item.description }}</p>
-          <time>⏱{{ item.end_time }}</time>
+          <time>⏱{{ parseTime(item.end_time) }}</time>
           <div class="buttonBox">
             <button class="btn" type="button" @click="deleteList(item.ID)">Delete</button>
-            <button class="btn" type="button" @click="changeState(item.ID, type[0].code)">{{ type[0].title }}</button>
-            <button class="btn" type="button" @click="changeState(item.ID, type[1].code)">{{ type[1].title }}</button>
+            <button
+              class="btn"
+              type="button"
+              @click="changeState(item.ID, type[0].status)"
+            >{{ type[0].title }}</button>
+            <button
+              class="btn"
+              type="button"
+              @click="changeState(item.ID, type[1].status)"
+            >{{ type[1].title }}</button>
           </div>
         </div>
       </div>

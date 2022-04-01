@@ -4,6 +4,7 @@ import { useUserStore } from '@/store'
 
 const userStore = useUserStore()
 
+// 欢迎时间
 const sayHi = (): string => {
   const now = new Date().getHours()
   if (now < 3 && now > 18) {
@@ -17,6 +18,7 @@ const sayHi = (): string => {
   }
 }
 
+// 转至添加新list
 const addList = () => {
   router.push('/add')
 }
