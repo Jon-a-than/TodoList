@@ -1,10 +1,8 @@
 <script lang="ts" setup>
 import Header from '@/components/header/index.vue'
 import router from '@/router';
-import { useUserStore } from '@/store'
 
-const userStore = useUserStore()
-if(!userStore.token)
+if(!localStorage.getItem('token'))
   router.push('/login')
 </script>
 

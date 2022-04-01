@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import router from '@/router';
 import { useUserStore } from '@/store'
 
 const userStore = useUserStore()
@@ -16,11 +17,16 @@ const sayHi = (): string => {
   }
 }
 
+const addList = () => {
+  router.push('/add')
+}
+
 </script>
 
 <template>
   <header>
     <span>TodoList</span>
+    <button v-show="userStore.name" @click="addList" type="button">📌ADD</button>
     <p v-if="userStore.name">
       <span>Hi!</span>
       {{ userStore.name }}
@@ -50,4 +56,18 @@ header {
     }
   }
 }
+button {
+  transition: all .5s;
+  background-color: #6c696e;
+  border: 0;
+  border-left: solid 2px #484257;
+  border-radius: 0 5px 5px 0;
+  color: #fff;
+  font-size: 1.2rem;
+  &:hover {
+    border-left: solid 5px #7e4fff;
+    background-color: #bba2ff;
+    padding: 0 10px;
+  }
+  }
 </style>

@@ -5,8 +5,7 @@ import { ApiPost } from "@/utils/request"
 export const useUserStore = defineStore('user', {
   state: (): UserState => {
     return {
-      name: 'Jonathan',
-      token: ''
+      name: ''
     }
   },
   actions: {
@@ -21,10 +20,12 @@ export const useUserStore = defineStore('user', {
       }
       else {
         alert('登录成功')
-        this.$state.token = res.data[0].token
         this.$state.name = user_name
         localStorage.setItem('token', res.data[0].token);
       }
     }
+  },
+  persist: {
+    enabled: true
   }
 })

@@ -1,8 +1,12 @@
 <script lang="ts" setup>
 import { useListStore } from '@/store'
-import { reactive } from 'vue';
 
-const type = ['Todo', 'Doing', 'Done']
+const type = [
+  { title: 'Todo', code: 0 },
+  { title: 'Doing', code: 1 },
+  { title: 'Done', code: 2 }
+]
+
 const props = defineProps({
   btnColor: {
     type: String,
@@ -19,24 +23,24 @@ const props = defineProps({
   bgColor: {
     type: String,
     default: '#a6e3ff',
-  },
-  lists: {
-    type: Object,
-    default: [],
-  },
+  }
 })
 
-const listStore = useListStore()
-const lists = listStore.$state[props.title]
+const listStore: any = useListStore()
 
 for (let i = 0, j = 0; i < 3; i++) {
-  if (type[i] != props.title)
+  if (type[i].title != props.title)
     type[j++] = type[i]
 }
-type.length = 2
+type.pop()
 
+const deleteList = (id: number) => {
+  listStore.deleteList(id)
+}
 
-const deleteList = (id: number) => listStore.deleteList(id)
+const changeState = (id: number, state: number) => {
+  console.log(id, state)
+}
 
 </script>
 
@@ -45,14 +49,14 @@ const deleteList = (id: number) => listStore.deleteList(id)
     <h1>{{ props.title }}</h1>
     <div class="itemBox">
       <div>
-        <div class="item" v-for="(item, index) in lists" :key="index">
+        <div class="item" v-for="(item, index) in listStore[props.title]" :key="index">
           <h3>📌{{ index + 1 }}.{{ item.todo_name }}</h3>
-          <p>{{ item.description }}</p>
-          <time>{{ item.end_time }}</time>
+          <p>📝任务描述: {{ item.description }}</p>
+          <time>⏱{{ item.end_time }}</time>
           <div class="buttonBox">
             <button class="btn" type="button" @click="deleteList(item.ID)">Delete</button>
-            <button class="btn" type="button" @click="">{{ type[0] }}</button>
-            <button class="btn" type="button" @click="">{{ type[1] }}</button>
+            <button class="btn" type="button" @click="changeState(item.ID, type[0].code)">{{ type[0].title }}</button>
+            <button class="btn" type="button" @click="changeState(item.ID, type[1].code)">{{ type[1].title }}</button>
           </div>
         </div>
       </div>

@@ -4,6 +4,7 @@ import List from '@/components/list/index.vue'
 import { useListStore } from '@/store';
 
 useListStore().requireList()
+
 const listType = [{
   btnColor: '#c5f3ff',
   bgColor: '#a6e3ff',
@@ -28,6 +29,7 @@ const listType = [{
     <section v-else>
       <List
         v-for="item in listType"
+        :key="item.title"
         :title="item.title"
         :themeColor="item.themeColor"
         :bgColor="item.bgColor"

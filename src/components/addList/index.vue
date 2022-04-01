@@ -1,34 +1,50 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
+import router from '@/router';
+import { useListStore } from '@/store';
+import { reactive } from 'vue';
 
+const listStore = useListStore()
 
-const title = ref('')
+const data = reactive({
+  todo_name: '',
+  description: '',
+  end_time: ''
+})
 
-const addList = () => {
-
+const addList = async () => {
+  if (data.todo_name && data.description && data.end_time) {
+    await listStore.addList({
+      todo_name: data.todo_name,
+      description: data.description,
+      end_time: Math.floor(new Date(data.end_time).getTime() / 1000)
+    })
+    router.push('/list')
+  } else alert('请完善任务信息')
 }
+
+const cancle = () => router.push('/list')
 </script>
 
 <template>
   <div class="container">
-    <form>
-      <p>
-        <span>📌</span>
-        <input type="text" v-model="title" placeholder="List to do" />
-      </p>
-      <p>
-        <select name="type">
-          <option value="0">todo</option>
-          <option value="1">doing</option>
-          <option value="2">done</option>
-        </select>
-        <span>
-          截止时间:
-          <input type="datetime-local" />
-        </span>
-        <button type="button" @click="addList">🎁添加</button>
-      </p>
-    </form>
+    <p>
+      <span>📌</span>
+      <input type="text" v-model="data.todo_name" placeholder="任务标题" />
+    </p>
+    <p>
+      <span>📝</span>
+      <input type="text" v-model="data.description" placeholder="任务描述" />
+    </p>
+    <p>
+      <span>
+        ⏱
+        <input type="datetime-local" v-model="data.end_time" />
+      </span>
+    </p>
+    <div class="btn">
+      <button type="button" @click="addList">📤添加</button>
+      <button type="button" @click="cancle">🧷取消</button>
+    </div>
   </div>
 </template>
 
@@ -36,17 +52,16 @@ const addList = () => {
 $hover: #ff69b4;
 
 .container {
-  margin-bottom: 40vh;
-  width: 50%;
-  @media (max-width: 920px) {
-    min-width: 500px;
-    @media (max-width: 600px) {
-      width: 100%;
-    }
-  }
+  height: 50%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 p {
   width: 100%;
+  max-width: 600px;
   margin: 10px;
   transition: all 1s;
   flex-grow: 1;
@@ -74,17 +89,9 @@ input:focus {
   outline: none;
   border-color: $hover;
 }
-select {
-  outline: none !important;
-  background-color: #000;
-  color: #fff;
-  font-size: 1.5rem;
-  border: 0;
-  option {
-    border: 0 !important;
-  }
-}
+
 button {
+  width: 100%;
   transition: all 1s;
   background-color: #000;
   color: #fff;
@@ -106,17 +113,14 @@ span {
     user-select: none;
     &:hover {
       background-color: $hover;
-      border-radius: 20px;
+      border-radius: 10px 0;
       margin-bottom: 0;
     }
   }
 }
-
-.container form {
-  max-width: 100%;
+.btn {
+  width: 80%;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: flex-end;
+  justify-content: space-around;
 }
 </style>

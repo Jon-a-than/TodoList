@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory, onBeforeRouteLeave } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
   {
@@ -16,6 +16,10 @@ const routes = [
       {
         path: '/login',
         component: () => import('@/views/login/index.vue')
+      },
+      {
+        path: '/add',
+        component: () => import('@/components/addList/index.vue')
       }
     ]
   },
