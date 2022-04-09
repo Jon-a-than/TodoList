@@ -15,11 +15,9 @@ if (localStorage.getItem('token') != '')
   router.push('/list')
 const login = async () => {
   if (loginMessage.user_name && loginMessage.passwd) {
-    userStore.login(loginMessage.user_name, loginMessage.passwd)
-    setTimeout(() => {
-      if (localStorage.getItem('token') != '')
-        router.push('/list')
-    }, 1000)
+    const success = await userStore.login(loginMessage.user_name, loginMessage.passwd)
+    if (success)
+      router.push('/list')
   } else alert('请输入用户名和密码')
 }
 </script>

@@ -9,6 +9,7 @@ export const useUserStore = defineStore('user', {
     }
   },
   actions: {
+    // 登录
     async login(user_name: string, passwd: string) {
       const res: any = (await ApiPost('user/login', {
         user_name,
@@ -17,11 +18,14 @@ export const useUserStore = defineStore('user', {
       console.log(res)
       if (res.code != 2000) {
         alert(res.message)
+        return new Promise<boolean>(({}, reject) => reject(false))
       }
       else {
         alert('登录成功')
         this.$state.name = user_name
-        localStorage.setItem('token', res.data[0].token);
+        localStorage.setItem('token', res.data[0].token)
+        localStorage.setItem('first', new Date().toLocaleString())
+        return new Promise<boolean>((resolve) => resolve(true))
       }
     }
   },
